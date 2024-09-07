@@ -1,0 +1,47 @@
+@startuml
+
+interface Pagamento {
+    +String realizarPagamento(Pedido pedido)
+    +boolean validarPagamento()
+}
+
+class PagamentoCC implements Pagamento {
+    -String numero
+    -String dataExpiracao
+    -String cvv
+
+    +PagamentoCC(String numero, String dataExpiracao, String cvv)
+    +boolean validarPagamento()
+    +String realizarPagamento(Pedido pedido)
+}
+
+class PagamentoPaypal implements Pagamento {
+    -String email
+    -String senha
+
+    +PagamentoPaypal(String email, String senha)
+    +boolean validarPagamento()
+    +String realizarPagamento(Pedido pedido)
+}
+
+class Pedido {
+    -double valorTotal
+
+    +Pedido(double valorTotal)
+    +double getValorTotal()
+    +void setValorTotal(double valorTotal)
+}
+
+class ProcessarPedido {
+    -Pagamento formaPagamento
+
+    +void definirMetodoPagamento(Pagamento pagamento)
+    +String processarPagamento(Pedido pedido)
+}
+
+Pagamento <|.. PagamentoCC
+Pagamento <|.. PagamentoPaypal
+ProcessarPedido --> Pagamento
+ProcessarPedido --> Pedido
+
+@enduml
